@@ -3,8 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\stefa\\source\\repos\\Ds-projekat\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{11C8C55D-DBF2-40D0-8AA3-84ED0D00724B}|Ds-projekat\\Ds-projekat.csproj|c:\\users\\stefa\\source\\repos\\ds-projekat\\ds-projekat\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{11C8C55D-DBF2-40D0-8AA3-84ED0D00724B}|Ds-projekat\\Ds-projekat.csproj|solutionrelative:ds-projekat\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{11C8C55D-DBF2-40D0-8AA3-84ED0D00724B}|Ds-projekat\\Ds-projekat.csproj|c:\\users\\stefa\\source\\repos\\ds-projekat\\ds-projekat\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{11C8C55D-DBF2-40D0-8AA3-84ED0D00724B}|Ds-projekat\\Ds-projekat.csproj|solutionrelative:ds-projekat\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{11C8C55D-DBF2-40D0-8AA3-84ED0D00724B}|Ds-projekat\\Ds-projekat.csproj|c:\\users\\stefa\\source\\repos\\ds-projekat\\ds-projekat\\database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{11C8C55D-DBF2-40D0-8AA3-84ED0D00724B}|Ds-projekat\\Ds-projekat.csproj|solutionrelative:ds-projekat\\database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{11C8C55D-DBF2-40D0-8AA3-84ED0D00724B}|Ds-projekat\\Ds-projekat.csproj|c:\\users\\stefa\\source\\repos\\ds-projekat\\ds-projekat\\dbfactory\\dbfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{11C8C55D-DBF2-40D0-8AA3-84ED0D00724B}|Ds-projekat\\Ds-projekat.csproj|solutionrelative:ds-projekat\\dbfactory\\dbfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{11C8C55D-DBF2-40D0-8AA3-84ED0D00724B}|Ds-projekat\\Ds-projekat.csproj|c:\\users\\stefa\\source\\repos\\ds-projekat\\ds-projekat\\repositories\\interfaces\\imemershiptyperepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{11C8C55D-DBF2-40D0-8AA3-84ED0D00724B}|Ds-projekat\\Ds-projekat.csproj|solutionrelative:ds-projekat\\repositories\\interfaces\\imemershiptyperepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +31,54 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Form1.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\stefa\\source\\repos\\Ds-projekat\\Ds-projekat\\Form1.cs",
-              "RelativeDocumentMoniker": "Ds-projekat\\Form1.cs",
-              "ToolTip": "C:\\Users\\stefa\\source\\repos\\Ds-projekat\\Ds-projekat\\Form1.cs [Design]",
-              "RelativeToolTip": "Ds-projekat\\Form1.cs [Design]",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\stefa\\source\\repos\\Ds-projekat\\Ds-projekat\\Program.cs",
+              "RelativeDocumentMoniker": "Ds-projekat\\Program.cs",
+              "ToolTip": "C:\\Users\\stefa\\source\\repos\\Ds-projekat\\Ds-projekat\\Program.cs",
+              "RelativeToolTip": "Ds-projekat\\Program.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwBEAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-12T13:13:02.641Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2026-03-05T17:59:39.725Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DbFactory.cs",
+              "DocumentMoniker": "C:\\Users\\stefa\\source\\repos\\Ds-projekat\\Ds-projekat\\DBFactory\\DbFactory.cs",
+              "RelativeDocumentMoniker": "Ds-projekat\\DBFactory\\DbFactory.cs",
+              "ToolTip": "C:\\Users\\stefa\\source\\repos\\Ds-projekat\\Ds-projekat\\DBFactory\\DbFactory.cs",
+              "RelativeToolTip": "Ds-projekat\\DBFactory\\DbFactory.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-05T17:55:28.213Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DataBase.cs",
+              "DocumentMoniker": "C:\\Users\\stefa\\source\\repos\\Ds-projekat\\Ds-projekat\\DataBase.cs",
+              "RelativeDocumentMoniker": "Ds-projekat\\DataBase.cs",
+              "ToolTip": "C:\\Users\\stefa\\source\\repos\\Ds-projekat\\Ds-projekat\\DataBase.cs",
+              "RelativeToolTip": "Ds-projekat\\DataBase.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAawBUAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-05T17:55:08.06Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IMemershipTypeRepository.cs",
+              "DocumentMoniker": "C:\\Users\\stefa\\source\\repos\\Ds-projekat\\Ds-projekat\\Repositories\\Interfaces\\IMemershipTypeRepository.cs",
+              "RelativeDocumentMoniker": "Ds-projekat\\Repositories\\Interfaces\\IMemershipTypeRepository.cs",
+              "ToolTip": "C:\\Users\\stefa\\source\\repos\\Ds-projekat\\Ds-projekat\\Repositories\\Interfaces\\IMemershipTypeRepository.cs",
+              "RelativeToolTip": "Ds-projekat\\Repositories\\Interfaces\\IMemershipTypeRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-05T17:54:29.4Z",
+              "EditorCaption": ""
             }
           ]
         }

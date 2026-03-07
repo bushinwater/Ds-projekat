@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace Ds_projekat
+namespace Ds_projekat.Repositories.Interfaces
 {
     internal interface ILocationRepository
     {
         int Add(Location l);
         bool Update(Location l);
         bool Delete(int id);
-        Location? GetById(int id);
+        Location GetById(int id);
         List<Location> GetAll();
     }
 }

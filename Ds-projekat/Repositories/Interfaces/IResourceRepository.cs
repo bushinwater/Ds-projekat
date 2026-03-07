@@ -1,18 +1,15 @@
 ﻿using System.Collections.Generic;
 
-namespace Ds_projekat
+namespace Ds_projekat.Repositories.Interfaces
 {
     internal interface IResourceRepository
     {
-        int AddResource(Resource r, DeskDetails? desk, RoomDetails? room);
-        bool UpdateResource(Resource r, DeskDetails? desk, RoomDetails? room);
-        bool DeleteResource(int resourceId);
-
-        Resource? GetResource(int resourceId);
-        DeskDetails? GetDeskDetails(int resourceId);
-        RoomDetails? GetRoomDetails(int resourceId);
-
-        List<Resource> GetAllResources();
-        List<Resource> GetResourcesByLocation(int locationId);
+        int Add(Resource r);
+        bool Update(Resource r);
+        bool Delete(int id);
+        Resource GetById(int id);
+        List<Resource> GetAll();
+        List<Resource> GetByLocation(int locationId);
+        List<Resource> GetByType(string resourceType);
     }
 }

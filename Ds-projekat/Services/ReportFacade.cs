@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using Ds_projekat.Export;
+using Ds_projekat.Repositories.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace Ds_projekat.Services
 {
@@ -9,6 +11,8 @@ namespace Ds_projekat.Services
         private readonly IReservationRepository _reservationRepository;
         private readonly ILocationRepository _locationRepository;
         private readonly IResourceRepository _resourceRepository;
+        private readonly IMembershipTypeRepository _membershipTypeRepository;
+        private readonly IReportExporter _reportExporter;
 
         public ReportFacade()
         {
@@ -16,56 +20,78 @@ namespace Ds_projekat.Services
             _reservationRepository = new ReservationRepository();
             _locationRepository = new LocationRepository();
             _resourceRepository = new ResourceRepository();
+            _membershipTypeRepository = new MembershipTypeRepository();
+            _reportExporter = new CsvExporterAdapter();
         }
 
-        public List<User> GetAllUsers()
+        public ServiceResult ExportUsersToCsv(string filePath)
         {
-            return _userRepository.GetAll();
-        }
-
-        public List<Location> GetAllLocations()
-        {
-            return _locationRepository.GetAll();
-        }
-
-        public List<Resource> GetAllResources()
-        {
-            return _resourceRepository.GetAllResources();
-        }
-
-        public List<Reservation> GetReservationsByUser(int userId)
-        {
-            return _reservationRepository.GetByUser(userId);
-        }
-
-        public List<Reservation> GetReservationsByResource(int resourceId)
-        {
-            return _reservationRepository.GetByResource(resourceId);
-        }
-
-        public string BuildUsersCsv()
-        {
-            List<User> users = _userRepository.GetAll();
-            StringBuilder sb = new StringBuilder();
-
-            sb.AppendLine("UserID,FirstName,LastName,Email,Phone,MembershipTypeID,MembershipStartDate,MembershipEndDate,AccountStatus");
-
-            foreach (User u in users)
+            try
             {
-                sb.AppendLine(
-                    u.UserID + "," +
-                    u.FirstName + "," +
-                    u.LastName + "," +
-                    u.Email + "," +
-                    u.Phone + "," +
-                    u.MembershipTypeID + "," +
-                    u.MembershipStartDate.ToShortDateString() + "," +
-                    u.MembershipEndDate.ToShortDateString() + "," +
-                    u.AccountStatus
-                );
+                List<User> users = _userRepository.GetAll();
+                _reportExporter.ExportUsers(filePath, users);
+                return ServiceResult.Ok("Users su uspesno eksportovani u CSV.");
             }
+            catch (Exception ex)
+            {
+                return ServiceResult.Fail("Greska pri exportu users: " + ex.Message);
+            }
+        }
 
-            return sb.ToString();
+        public ServiceResult ExportReservationsByUserToCsv(int userId, string filePath)
+        {
+            try
+            {
+                List<Reservation> reservations = _reservationRepository.GetByUser(userId);
+                _reportExporter.ExportReservations(filePath, reservations);
+                return ServiceResult.Ok("Reservations su uspesno eksportovane u CSV.");
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult.Fail("Greska pri exportu reservations: " + ex.Message);
+            }
+        }
+
+        public ServiceResult ExportResourcesToCsv(string filePath)
+        {
+            try
+            {
+                List<Resource> resources = _resourceRepository.GetAllResources();
+                _reportExporter.ExportResources(filePath, resources);
+                return ServiceResult.Ok("Resources su uspesno eksportovani u CSV.");
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult.Fail("Greska pri exportu resources: " + ex.Message);
+            }
+        }
+
+        public ServiceResult ExportLocationsToCsv(string filePath)
+        {
+            try
+            {
+                List<Location> locations = _locationRepository.GetAll();
+                _reportExporter.ExportLocations(filePath, locations);
+                return ServiceResult.Ok("Locations su uspesno eksportovane u CSV.");
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult.Fail("Greska pri exportu locations: " + ex.Message);
+            }
+        }
+
+        public ServiceResult ExportMembershipTypesToCsv(string filePath)
+        {
+            try
+            {
+                List<MembershipType> membershipTypes = _membershipTypeRepository.GetAll();
+                _reportExporter.ExportMembershipTypes(filePath, membershipTypes);
+                return ServiceResult.Ok("Membership types su uspesno eksportovani u CSV.");
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult.Fail("Greska pri exportu membership types: " + ex.Message);
+            }
         }
     }
 }

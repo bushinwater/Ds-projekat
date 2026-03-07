@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ds_projekat.Repositories;
+using Ds_projekat.Strategies.ReservationValidation;
 
 namespace Ds_projekat.Services
 {
@@ -21,33 +22,26 @@ namespace Ds_projekat.Services
         {
             try
             {
-                if (start >= end)
-                    return ServiceResult.Fail("End date must be after start date.");
-
-                User user = _userRepository.GetById(userId);
-                if (user == null)
-                    return ServiceResult.Fail("User doesnt exist.");
-
-                if (user.AccountStatus != "Active")
-                    return ServiceResult.Fail("User is not active.");
-
-                Resource resource = _resourceRepository.GetResource(resourceId);
-                if (resource == null)
-                    return ServiceResult.Fail("Resource doesnt exist.");
-
-                if (!resource.IsActive)
-                    return ServiceResult.Fail("Resource is not active.");
-
-                bool overlap = _reservationRepository.HasOverlap(resourceId, start, end, null);
-                if (overlap)
-                    return ServiceResult.Fail("Resource is already reserved in that time.");
-
-                if (resource.ResourceType == "Room")
+                ReservationRequest request = new ReservationRequest
                 {
-                    RoomDetails room = _resourceRepository.GetRoomDetails(resourceId);
-                    if (room != null && usersCount.HasValue && usersCount.Value > room.Capacity)
-                        return ServiceResult.Fail("Number of people is greater then supported for that room.");
-                }
+                    UserID = userId,
+                    ResourceID = resourceId,
+                    StartDateTime = start,
+                    EndDateTime = end,
+                    UsersCount = usersCount,
+                    IgnoreReservationId = null
+                };
+
+                ReservationValidator validator = new ReservationValidator();
+                validator.AddStrategy(new UserActiveValidationStrategy());
+                validator.AddStrategy(new ResourceActiveValidationStrategy());
+                validator.AddStrategy(new OverlapValidationStrategy());
+                validator.AddStrategy(new RoomCapacityValidationStrategy());
+
+                ReservationValidationResult validationResult = validator.Validate(request);
+
+                if (!validationResult.IsValid)
+                    return ServiceResult.Fail(validationResult.Message);
 
                 Reservation reservation = new Reservation();
                 reservation.UserID = userId;
@@ -59,11 +53,11 @@ namespace Ds_projekat.Services
 
                 int newId = _reservationRepository.Add(reservation);
 
-                return ServiceResult.Ok("Reservation created successfuly.", newId);
+                return ServiceResult.Ok("Rezervacija je uspesno kreirana.", newId);
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
-                return ServiceResult.Fail("Error while creating reservation: " + ex.Message);
+                return ServiceResult.Fail("Greska pri kreiranju rezervacije: " + ex.Message);
             }
         }
 
@@ -123,39 +117,32 @@ namespace Ds_projekat.Services
         {
             try
             {
-                if (start >= end)
-                    return ServiceResult.Fail("End date must be after start date.");
-
-                User user = _userRepository.GetById(userId);
-                if (user == null)
-                    return ServiceResult.Fail("User doesnt exist.");
-
-                if (user.AccountStatus != "Active")
-                    return ServiceResult.Fail("User is not active.");
-
-                Resource resource = _resourceRepository.GetResource(resourceId);
-                if (resource == null)
-                    return ServiceResult.Fail("Resource doesnt exist.");
-
-                if (!resource.IsActive)
-                    return ServiceResult.Fail("Resource is not active.");
-
-                bool overlap = _reservationRepository.HasOverlap(resourceId, start, end, null);
-                if (overlap)
-                    return ServiceResult.Fail("Resource is already reserved in that time.");
-
-                if (resource.ResourceType == "Room")
+                ReservationRequest request = new ReservationRequest
                 {
-                    RoomDetails room = _resourceRepository.GetRoomDetails(resourceId);
-                    if (room != null && usersCount.HasValue && usersCount.Value > room.Capacity)
-                        return ServiceResult.Fail("Number of user is greater then capacity of a room.");
-                }
+                    UserID = userId,
+                    ResourceID = resourceId,
+                    StartDateTime = start,
+                    EndDateTime = end,
+                    UsersCount = usersCount,
+                    IgnoreReservationId = null
+                };
 
-                return ServiceResult.Ok("Reservation can be created.");
+                ReservationValidator validator = new ReservationValidator();
+                validator.AddStrategy(new UserActiveValidationStrategy());
+                validator.AddStrategy(new ResourceActiveValidationStrategy());
+                validator.AddStrategy(new OverlapValidationStrategy());
+                validator.AddStrategy(new RoomCapacityValidationStrategy());
+
+                ReservationValidationResult validationResult = validator.Validate(request);
+
+                if (!validationResult.IsValid)
+                    return ServiceResult.Fail(validationResult.Message);
+
+                return ServiceResult.Ok("Rezervacija moze da se napravi.");
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
-                return ServiceResult.Fail("Error while checking reservation: " + ex.Message);
+                return ServiceResult.Fail("Greska pri proveri rezervacije: " + ex.Message);
             }
         }
     }

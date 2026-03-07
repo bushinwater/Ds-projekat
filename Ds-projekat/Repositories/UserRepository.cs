@@ -1,7 +1,11 @@
-﻿using System;
+﻿using Ds_projekat.Repositories.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Ds_projekat
+namespace Ds_projekat.Repositories
 {
     internal class UserRepository : BaseRepository, IUserRepository
     {
@@ -11,18 +15,18 @@ namespace Ds_projekat
 
             string sql =
 @"INSERT INTO Users(FirstName, LastName, Email, Phone, MembershipTypeID, MembershipStartDate, MembershipEndDate, AccountStatus)
-  VALUES(@fn,@ln,@em,@ph,@mt,@ms,@me,@st);
+  VALUES(@fn, @ln, @email, @phone, @mtid, @start, @end, @status);
   " + Factory.LastInsertIdSql;
 
             using var cmd = Factory.CreateCommand(sql, conn);
             cmd.Parameters.Add(Factory.CreateParameter("@fn", u.FirstName));
             cmd.Parameters.Add(Factory.CreateParameter("@ln", u.LastName));
-            cmd.Parameters.Add(Factory.CreateParameter("@em", u.Email));
-            cmd.Parameters.Add(Factory.CreateParameter("@ph", u.Phone));
-            cmd.Parameters.Add(Factory.CreateParameter("@mt", u.MembershipTypeID));
-            cmd.Parameters.Add(Factory.CreateParameter("@ms", u.MembershipStartDate));
-            cmd.Parameters.Add(Factory.CreateParameter("@me", u.MembershipEndDate));
-            cmd.Parameters.Add(Factory.CreateParameter("@st", u.AccountStatus));
+            cmd.Parameters.Add(Factory.CreateParameter("@email", u.Email));
+            cmd.Parameters.Add(Factory.CreateParameter("@phone", u.Phone));
+            cmd.Parameters.Add(Factory.CreateParameter("@mtid", u.MembershipTypeID));
+            cmd.Parameters.Add(Factory.CreateParameter("@start", u.MembershipStartDate));
+            cmd.Parameters.Add(Factory.CreateParameter("@end", u.MembershipEndDate));
+            cmd.Parameters.Add(Factory.CreateParameter("@status", u.AccountStatus));
 
             return Convert.ToInt32(cmd.ExecuteScalar());
         }
@@ -33,19 +37,19 @@ namespace Ds_projekat
 
             string sql =
 @"UPDATE Users
-  SET FirstName=@fn, LastName=@ln, Email=@em, Phone=@ph,
-      MembershipTypeID=@mt, MembershipStartDate=@ms, MembershipEndDate=@me, AccountStatus=@st
+  SET FirstName=@fn, LastName=@ln, Email=@email, Phone=@phone,
+      MembershipTypeID=@mtid, MembershipStartDate=@start, MembershipEndDate=@end, AccountStatus=@status
   WHERE UserID=@id";
 
             using var cmd = Factory.CreateCommand(sql, conn);
             cmd.Parameters.Add(Factory.CreateParameter("@fn", u.FirstName));
             cmd.Parameters.Add(Factory.CreateParameter("@ln", u.LastName));
-            cmd.Parameters.Add(Factory.CreateParameter("@em", u.Email));
-            cmd.Parameters.Add(Factory.CreateParameter("@ph", u.Phone));
-            cmd.Parameters.Add(Factory.CreateParameter("@mt", u.MembershipTypeID));
-            cmd.Parameters.Add(Factory.CreateParameter("@ms", u.MembershipStartDate));
-            cmd.Parameters.Add(Factory.CreateParameter("@me", u.MembershipEndDate));
-            cmd.Parameters.Add(Factory.CreateParameter("@st", u.AccountStatus));
+            cmd.Parameters.Add(Factory.CreateParameter("@email", u.Email));
+            cmd.Parameters.Add(Factory.CreateParameter("@phone", u.Phone));
+            cmd.Parameters.Add(Factory.CreateParameter("@mtid", u.MembershipTypeID));
+            cmd.Parameters.Add(Factory.CreateParameter("@start", u.MembershipStartDate));
+            cmd.Parameters.Add(Factory.CreateParameter("@end", u.MembershipEndDate));
+            cmd.Parameters.Add(Factory.CreateParameter("@status", u.AccountStatus));
             cmd.Parameters.Add(Factory.CreateParameter("@id", u.UserID));
 
             return cmd.ExecuteNonQuery() > 0;
@@ -59,38 +63,15 @@ namespace Ds_projekat
             return cmd.ExecuteNonQuery() > 0;
         }
 
-        public User? GetById(int id)
+        public User GetById(int id)
         {
             using var conn = Open();
             using var cmd = Factory.CreateCommand("SELECT * FROM Users WHERE UserID=@id", conn);
             cmd.Parameters.Add(Factory.CreateParameter("@id", id));
 
             using var r = cmd.ExecuteReader();
-            return r.Read() ? Map(r) : null;
-        }
+            if (!r.Read()) return null;
 
-        public User? GetByEmail(string email)
-        {
-            using var conn = Open();
-            using var cmd = Factory.CreateCommand("SELECT * FROM Users WHERE Email=@em", conn);
-            cmd.Parameters.Add(Factory.CreateParameter("@em", email));
-
-            using var r = cmd.ExecuteReader();
-            return r.Read() ? Map(r) : null;
-        }
-
-        public List<User> GetAll()
-        {
-            var list = new List<User>();
-            using var conn = Open();
-            using var cmd = Factory.CreateCommand("SELECT * FROM Users", conn);
-            using var r = cmd.ExecuteReader();
-            while (r.Read()) list.Add(Map(r));
-            return list;
-        }
-
-        private static User Map(dynamic r)
-        {
             return new User
             {
                 UserID = Convert.ToInt32(r["UserID"]),
@@ -101,8 +82,85 @@ namespace Ds_projekat
                 MembershipTypeID = Convert.ToInt32(r["MembershipTypeID"]),
                 MembershipStartDate = Convert.ToDateTime(r["MembershipStartDate"]),
                 MembershipEndDate = Convert.ToDateTime(r["MembershipEndDate"]),
-                AccountStatus = r["AccountStatus"].ToString() ?? "Active"
+                AccountStatus = r["AccountStatus"].ToString() ?? ""
             };
+        }
+
+        public List<User> GetAll()
+        {
+            var list = new List<User>();
+            using var conn = Open();
+            using var cmd = Factory.CreateCommand("SELECT * FROM Users", conn);
+            using var r = cmd.ExecuteReader();
+
+            while (r.Read())
+            {
+                list.Add(new User
+                {
+                    UserID = Convert.ToInt32(r["UserID"]),
+                    FirstName = r["FirstName"].ToString() ?? "",
+                    LastName = r["LastName"].ToString() ?? "",
+                    Email = r["Email"].ToString() ?? "",
+                    Phone = r["Phone"].ToString() ?? "",
+                    MembershipTypeID = Convert.ToInt32(r["MembershipTypeID"]),
+                    MembershipStartDate = Convert.ToDateTime(r["MembershipStartDate"]),
+                    MembershipEndDate = Convert.ToDateTime(r["MembershipEndDate"]),
+                    AccountStatus = r["AccountStatus"].ToString() ?? ""
+                });
+            }
+            return list;
+        }
+
+        public List<User> GetByMembershipType(int membershipTypeId)
+        {
+            var list = new List<User>();
+            using var conn = Open();
+            using var cmd = Factory.CreateCommand("SELECT * FROM Users WHERE MembershipTypeID=@mtid", conn);
+            cmd.Parameters.Add(Factory.CreateParameter("@mtid", membershipTypeId));
+            using var r = cmd.ExecuteReader();
+
+            while (r.Read())
+            {
+                list.Add(new User
+                {
+                    UserID = Convert.ToInt32(r["UserID"]),
+                    FirstName = r["FirstName"].ToString() ?? "",
+                    LastName = r["LastName"].ToString() ?? "",
+                    Email = r["Email"].ToString() ?? "",
+                    Phone = r["Phone"].ToString() ?? "",
+                    MembershipTypeID = Convert.ToInt32(r["MembershipTypeID"]),
+                    MembershipStartDate = Convert.ToDateTime(r["MembershipStartDate"]),
+                    MembershipEndDate = Convert.ToDateTime(r["MembershipEndDate"]),
+                    AccountStatus = r["AccountStatus"].ToString() ?? ""
+                });
+            }
+            return list;
+        }
+
+        public List<User> GetByStatus(string status)
+        {
+            var list = new List<User>();
+            using var conn = Open();
+            using var cmd = Factory.CreateCommand("SELECT * FROM Users WHERE AccountStatus=@status", conn);
+            cmd.Parameters.Add(Factory.CreateParameter("@status", status));
+            using var r = cmd.ExecuteReader();
+
+            while (r.Read())
+            {
+                list.Add(new User
+                {
+                    UserID = Convert.ToInt32(r["UserID"]),
+                    FirstName = r["FirstName"].ToString() ?? "",
+                    LastName = r["LastName"].ToString() ?? "",
+                    Email = r["Email"].ToString() ?? "",
+                    Phone = r["Phone"].ToString() ?? "",
+                    MembershipTypeID = Convert.ToInt32(r["MembershipTypeID"]),
+                    MembershipStartDate = Convert.ToDateTime(r["MembershipStartDate"]),
+                    MembershipEndDate = Convert.ToDateTime(r["MembershipEndDate"]),
+                    AccountStatus = r["AccountStatus"].ToString() ?? ""
+                });
+            }
+            return list;
         }
     }
 }

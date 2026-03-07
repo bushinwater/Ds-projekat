@@ -18,7 +18,7 @@ namespace Ds_projekat
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainShellForm());
+            Application.Run(new Form1());
             
         }
     }

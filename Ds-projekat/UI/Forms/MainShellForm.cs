@@ -55,16 +55,64 @@ namespace Ds_projekat.UI.Forms
         private void btnUsers_Click(object sender, EventArgs e)
         {
             ShowPage(_usersPage);
+            btnUsers.BackColor = Color.MediumBlue;
+            btnResources.BackColor = Color.Navy;
+            btnLocations.BackColor = Color.Navy;
+            btnMemberships.BackColor = Color.Navy;
+            btnReports.BackColor = Color.Navy;
+            btnReservations.BackColor = Color.Navy;
         }
 
         private void btnResources_Click(object sender, EventArgs e)
         {
             ShowPage(_resourcesPage);
+            btnUsers.BackColor = Color.Navy;
+            btnResources.BackColor = Color.MediumBlue;
+            btnLocations.BackColor = Color.Navy;
+            btnMemberships.BackColor = Color.Navy;
+            btnReports.BackColor = Color.Navy;
+            btnReservations.BackColor = Color.Navy;
         }
 
         private void btnReservations_Click(object sender, EventArgs e)
         {
             ShowPage(_reservationsPage);
+            btnUsers.BackColor = Color.Navy;
+            btnResources.BackColor = Color.Navy;
+            btnLocations.BackColor = Color.Navy;
+            btnMemberships.BackColor = Color.Navy;
+            btnReports.BackColor = Color.Navy;
+            btnReservations.BackColor = Color.MediumBlue;
+        }
+
+        private void btnLocations_Click(object sender, EventArgs e)
+        {
+            btnUsers.BackColor = Color.Navy;
+            btnResources.BackColor = Color.Navy;
+            btnLocations.BackColor = Color.MediumBlue;
+            btnMemberships.BackColor = Color.Navy;
+            btnReports.BackColor = Color.Navy;
+            btnReservations.BackColor = Color.Navy;
+        }
+
+        private void btnMemberships_Click(object sender, EventArgs e)
+        {
+            btnUsers.BackColor = Color.Navy;
+            btnResources.BackColor = Color.Navy;
+            btnLocations.BackColor = Color.Navy;
+            btnMemberships.BackColor = Color.MediumBlue;
+            btnReports.BackColor = Color.Navy;
+            btnReservations.BackColor = Color.Navy;
+        }
+
+        private void btnReports_Click(object sender, EventArgs e)
+        {
+            btnUsers.BackColor = Color.Navy;
+            btnResources.BackColor = Color.Navy;
+            btnLocations.BackColor = Color.Navy;
+            btnMemberships.BackColor = Color.Navy;
+            btnReports.BackColor = Color.MediumBlue;
+            btnReservations.BackColor = Color.Navy;
         }
     }
 }

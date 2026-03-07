@@ -36,15 +36,15 @@
             this.btnResources = new System.Windows.Forms.Button();
             this.btnUsers = new System.Windows.Forms.Button();
             this.flpMenu = new System.Windows.Forms.FlowLayoutPanel();
+            this.pbLogo = new System.Windows.Forms.PictureBox();
             this.pnlSidebarHeader = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.pnlContent = new System.Windows.Forms.Panel();
             this.pnlTop = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.pbLogo = new System.Windows.Forms.PictureBox();
             this.pnlSidebar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).BeginInit();
             this.pnlSidebarHeader.SuspendLayout();
             this.pnlContent.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlSidebar
@@ -74,7 +74,7 @@
             this.btnReports.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReports.ForeColor = System.Drawing.Color.White;
             this.btnReports.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReports.Location = new System.Drawing.Point(0, 480);
+            this.btnReports.Location = new System.Drawing.Point(0, 447);
             this.btnReports.Name = "btnReports";
             this.btnReports.Size = new System.Drawing.Size(300, 70);
             this.btnReports.TabIndex = 9;
@@ -82,6 +82,7 @@
             this.btnReports.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnReports.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnReports.UseVisualStyleBackColor = false;
+            this.btnReports.Click += new System.EventHandler(this.btnReports_Click);
             // 
             // btnMemberships
             // 
@@ -92,7 +93,7 @@
             this.btnMemberships.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMemberships.ForeColor = System.Drawing.Color.White;
             this.btnMemberships.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMemberships.Location = new System.Drawing.Point(0, 404);
+            this.btnMemberships.Location = new System.Drawing.Point(0, 377);
             this.btnMemberships.Name = "btnMemberships";
             this.btnMemberships.Size = new System.Drawing.Size(300, 70);
             this.btnMemberships.TabIndex = 8;
@@ -100,6 +101,7 @@
             this.btnMemberships.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMemberships.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnMemberships.UseVisualStyleBackColor = false;
+            this.btnMemberships.Click += new System.EventHandler(this.btnMemberships_Click);
             // 
             // btnLocations
             // 
@@ -110,7 +112,7 @@
             this.btnLocations.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLocations.ForeColor = System.Drawing.Color.White;
             this.btnLocations.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnLocations.Location = new System.Drawing.Point(0, 328);
+            this.btnLocations.Location = new System.Drawing.Point(0, 307);
             this.btnLocations.Name = "btnLocations";
             this.btnLocations.Size = new System.Drawing.Size(300, 70);
             this.btnLocations.TabIndex = 7;
@@ -118,6 +120,7 @@
             this.btnLocations.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnLocations.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnLocations.UseVisualStyleBackColor = false;
+            this.btnLocations.Click += new System.EventHandler(this.btnLocations_Click);
             // 
             // btnReservations
             // 
@@ -128,7 +131,7 @@
             this.btnReservations.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReservations.ForeColor = System.Drawing.Color.White;
             this.btnReservations.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReservations.Location = new System.Drawing.Point(0, 252);
+            this.btnReservations.Location = new System.Drawing.Point(0, 237);
             this.btnReservations.Name = "btnReservations";
             this.btnReservations.Size = new System.Drawing.Size(300, 70);
             this.btnReservations.TabIndex = 6;
@@ -147,7 +150,7 @@
             this.btnResources.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnResources.ForeColor = System.Drawing.Color.White;
             this.btnResources.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnResources.Location = new System.Drawing.Point(0, 176);
+            this.btnResources.Location = new System.Drawing.Point(0, 167);
             this.btnResources.Name = "btnResources";
             this.btnResources.Size = new System.Drawing.Size(300, 70);
             this.btnResources.TabIndex = 5;
@@ -188,6 +191,16 @@
             this.flpMenu.TabIndex = 3;
             this.flpMenu.WrapContents = false;
             // 
+            // pbLogo
+            // 
+            this.pbLogo.Image = global::Ds_projekat.Properties.Resources.house;
+            this.pbLogo.Location = new System.Drawing.Point(20, 20);
+            this.pbLogo.Name = "pbLogo";
+            this.pbLogo.Size = new System.Drawing.Size(48, 48);
+            this.pbLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbLogo.TabIndex = 1;
+            this.pbLogo.TabStop = false;
+            // 
             // pnlSidebarHeader
             // 
             this.pnlSidebarHeader.Controls.Add(this.label1);
@@ -196,6 +209,17 @@
             this.pnlSidebarHeader.Name = "pnlSidebarHeader";
             this.pnlSidebarHeader.Size = new System.Drawing.Size(300, 100);
             this.pnlSidebarHeader.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(74, 28);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(146, 32);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "DeskFlow";
             // 
             // pnlContent
             // 
@@ -216,27 +240,6 @@
             this.pnlTop.Size = new System.Drawing.Size(882, 60);
             this.pnlTop.TabIndex = 0;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(74, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(146, 32);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "DeskFlow";
-            // 
-            // pbLogo
-            // 
-            this.pbLogo.Image = global::Ds_projekat.Properties.Resources.house;
-            this.pbLogo.Location = new System.Drawing.Point(20, 20);
-            this.pbLogo.Name = "pbLogo";
-            this.pbLogo.Size = new System.Drawing.Size(48, 48);
-            this.pbLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbLogo.TabIndex = 1;
-            this.pbLogo.TabStop = false;
-            // 
             // MainShellForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -251,10 +254,10 @@
             this.Load += new System.EventHandler(this.MainShellForm_Load);
             this.pnlSidebar.ResumeLayout(false);
             this.pnlSidebar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).EndInit();
             this.pnlSidebarHeader.ResumeLayout(false);
             this.pnlSidebarHeader.PerformLayout();
             this.pnlContent.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).EndInit();
             this.ResumeLayout(false);
 
         }

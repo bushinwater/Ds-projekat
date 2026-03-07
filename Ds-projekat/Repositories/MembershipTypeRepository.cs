@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Ds_projekat
 {
-    internal class MembershipTypeRepository : BaseRepository, IMemershipTypeRepository
+    internal class MembershipTypeRepository : BaseRepository, IMembershipTypeRepository
     {
         public int Add(MembershipType mt)
         {

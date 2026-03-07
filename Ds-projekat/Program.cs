@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ds_projekat.UI.Forms;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Ds_projekat
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new MainShellForm());
             
         }
     }

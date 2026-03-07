@@ -7,7 +7,7 @@
     <ProjectGuid>{11C8C55D-DBF2-40D0-8AA3-84ED0D00724B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Ds_projekat</RootNamespace>
-	<LangVersion>latest</LangVersion>
+    <LangVersion>latest</LangVersion>
     <AssemblyName>Ds-projekat</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -85,6 +85,9 @@
     <Compile Include="DBFactory\DbFactory.cs" />
     <Compile Include="DBFactory\MySqlProviderFactory.cs" />
     <Compile Include="DBFactory\SqlServerProviderFactory.cs" />
+    <Compile Include="Export\CsvExporterAdapter.cs" />
+    <Compile Include="Export\IReportExporter.cs" />
+    <Compile Include="Export\SimpleCsvWriter.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,14 +95,65 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="DBFactory\IdbProviderFactory.cs" />
+    <Compile Include="obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AdminRepository.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\DbHelpers.cs" />
-    <Compile Include="Repositories\Interfaces\IMemershipTypeRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IAdminRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ILocationRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IMembershipTypeRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IReservationRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IResourceRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IUserRepository.cs" />
+    <Compile Include="Repositories\LocationRepository.cs" />
     <Compile Include="Repositories\MembershipTypeRepository.cs" />
     <Compile Include="Repositories\Models.cs" />
+    <Compile Include="Repositories\ReservationRepository.cs" />
+    <Compile Include="Repositories\ResourceRepository.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Services\AdminFacade.cs" />
+    <Compile Include="Services\LocationFacade.cs" />
+    <Compile Include="Services\MembershipFacade.cs" />
+    <Compile Include="Services\ReportFacade.cs" />
+    <Compile Include="Services\ReservationFacade.cs" />
+    <Compile Include="Services\ResourceFacade.cs" />
+    <Compile Include="Services\ServiceResult.cs" />
+    <Compile Include="Services\UserFacade.cs" />
+    <Compile Include="Strategies\ReservationValidation\IReservationValidationStrategy.cs" />
+    <Compile Include="Strategies\ReservationValidation\OverlapValidationStrategy.cs" />
+    <Compile Include="Strategies\ReservationValidation\ReservationRequest.cs" />
+    <Compile Include="Strategies\ReservationValidation\ReservationValidationResult.cs" />
+    <Compile Include="Strategies\ReservationValidation\ReservationValidator.cs" />
+    <Compile Include="Strategies\ReservationValidation\ResourceActiveValidationStrategy.cs" />
+    <Compile Include="Strategies\ReservationValidation\RoomCapacityValidationStrategy.cs" />
+    <Compile Include="Strategies\ReservationValidation\UserActiveValidationStrategy.cs" />
     <Compile Include="test.cs" />
+    <Compile Include="UI\Forms\MainShellForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\MainShellForm.Designer.cs">
+      <DependentUpon>MainShellForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Pages\ReservationsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Pages\ReservationsPage.Designer.cs">
+      <DependentUpon>ReservationsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Pages\ResourcesPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Pages\ResourcesPage.Designer.cs">
+      <DependentUpon>ResourcesPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Pages\UsersPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Pages\UsersPage.Designer.cs">
+      <DependentUpon>UsersPage.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -112,6 +166,21 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\Forms\MainShellForm.resx">
+      <DependentUpon>MainShellForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Pages\ReservationsPage.resx">
+      <DependentUpon>ReservationsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Pages\ResourcesPage.resx">
+      <DependentUpon>ResourcesPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Pages\UsersPage.resx">
+      <DependentUpon>UsersPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Debug\Ds-projekat.csproj.AssemblyReference.cache" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -125,6 +194,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config.txt" />
+    <Content Include="UI\Assets\clanstvo.png" />
+    <Content Include="UI\Assets\house.png" />
+    <Content Include="UI\Assets\izvestaj.png" />
+    <Content Include="UI\Assets\lokacija.png" />
+    <Content Include="UI\Assets\resursi.png" />
+    <Content Include="UI\Assets\rezervacije.png" />
+    <Content Include="UI\Assets\user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+    <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,5 +1,4 @@
-﻿using Ds_projekat.UI.Forms;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -18,8 +17,18 @@ namespace Ds_projekat
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
-            
+
+            try
+            {
+                AppConfig.Instance.Load("config.txt");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Greška pri učitavanju config.txt fajla:\n" + ex.Message, "Config error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            Application.Run(new LoginForm());
+
         }
     }
 }

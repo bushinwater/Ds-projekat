@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Ds_projekat
 {
@@ -53,6 +54,7 @@ namespace Ds_projekat
 
         public bool Delete(int id)
         {
+            //MessageBox.Show("ID ZA BRISANJE: " + id);
             using var conn = Open();
             using var cmd = Factory.CreateCommand("DELETE FROM Users WHERE UserID=@id", conn);
             cmd.Parameters.Add(Factory.CreateParameter("@id", id));

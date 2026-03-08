@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Ds_projekat
 {
@@ -72,6 +73,27 @@ namespace Ds_projekat
                 Username = r["Username"].ToString() ?? "",
                 HashedPass = r["HashedPass"].ToString() ?? ""
             };
+        }
+        public List<Admin> GetAll()
+        {
+            List<Admin> list = new List<Admin>();
+
+            using var conn = Open();
+            using var cmd = Factory.CreateCommand("SELECT * FROM Admins ORDER BY UserID", conn);
+            using var r = cmd.ExecuteReader();
+
+            while (r.Read())
+            {
+                list.Add(new Admin
+                {
+                    UserID = Convert.ToInt32(r["UserID"]),
+                    RoleName = r["RoleName"].ToString() ?? "",
+                    Username = r["Username"].ToString() ?? "",
+                    HashedPass = r["HashedPass"].ToString() ?? ""
+                });
+            }
+
+            return list;
         }
     }
 }

@@ -271,5 +271,79 @@ namespace Ds_projekat
             }
             return list;
         }
+
+        public bool LocationHasResources(int locationId)
+        {
+            using (var conn = Open())
+            using (var cmd = Factory.CreateCommand("SELECT COUNT(*) FROM Resources WHERE LocationID=@lid", conn))
+            {
+                cmd.Parameters.Add(Factory.CreateParameter("@lid", locationId));
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
+            }
+        }
+
+        public bool DeleteByLocationId(int locationId)
+        {
+            using (var conn = Open())
+            using (var tx = conn.BeginTransaction())
+            {
+                try
+                {
+                    // 1. obrisi rezervacije za resurse te lokacije
+                    using (var cmd = Factory.CreateCommand(
+                        @"DELETE FROM Reservations
+                  WHERE ResourceID IN (
+                      SELECT ResourceID FROM Resources WHERE LocationID=@lid
+                  )", conn))
+                    {
+                        cmd.Transaction = tx;
+                        cmd.Parameters.Add(Factory.CreateParameter("@lid", locationId));
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // 2. obrisi DeskDetails
+                    using (var cmd = Factory.CreateCommand(
+                        @"DELETE FROM DeskDetails
+                  WHERE ResourceID IN (
+                      SELECT ResourceID FROM Resources WHERE LocationID=@lid
+                  )", conn))
+                    {
+                        cmd.Transaction = tx;
+                        cmd.Parameters.Add(Factory.CreateParameter("@lid", locationId));
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // 3. obrisi RoomDetails
+                    using (var cmd = Factory.CreateCommand(
+                        @"DELETE FROM RoomDetails
+                  WHERE ResourceID IN (
+                      SELECT ResourceID FROM Resources WHERE LocationID=@lid
+                  )", conn))
+                    {
+                        cmd.Transaction = tx;
+                        cmd.Parameters.Add(Factory.CreateParameter("@lid", locationId));
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // 4. obrisi resurse
+                    using (var cmd = Factory.CreateCommand(
+                        @"DELETE FROM Resources WHERE LocationID=@lid", conn))
+                    {
+                        cmd.Transaction = tx;
+                        cmd.Parameters.Add(Factory.CreateParameter("@lid", locationId));
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    tx.Commit();
+                    return true;
+                }
+                catch
+                {
+                    tx.Rollback();
+                    throw;
+                }
+            }
+        }
     }
 }

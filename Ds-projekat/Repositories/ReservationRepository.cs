@@ -115,5 +115,150 @@ namespace Ds_projekat
                 ReservationStatus = r["ReservationStatus"].ToString() ?? "Active"
             };
         }
+        public List<Reservation> GetAll()
+        {
+            List<Reservation> list = new List<Reservation>();
+
+            using var con = Open();
+            using var cmd = con.CreateCommand();
+
+            cmd.CommandText = @"
+        SELECT ReservationID, UserID, ResourceID, UsersCount,
+               StartDateTime, EndDateTime, ReservationStatus
+        FROM Reservations
+        ORDER BY ReservationID DESC";
+
+            using var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Reservation r = new Reservation
+                {
+                    ReservationID = Convert.ToInt32(reader["ReservationID"]),
+                    UserID = Convert.ToInt32(reader["UserID"]),
+                    ResourceID = Convert.ToInt32(reader["ResourceID"]),
+                    UsersCount = reader["UsersCount"] == DBNull.Value ? null : Convert.ToInt32(reader["UsersCount"]),
+                    StartDateTime = Convert.ToDateTime(reader["StartDateTime"]),
+                    EndDateTime = Convert.ToDateTime(reader["EndDateTime"]),
+                    ReservationStatus = reader["ReservationStatus"].ToString()
+                };
+
+                list.Add(r);
+            }
+
+            return list;
+        }
+
+
+
+        public bool UserHasReservations(int userId)
+        {
+            using (var conn = Open())
+            using (var cmd = Factory.CreateCommand("SELECT COUNT(*) FROM Reservations WHERE UserID=@uid", conn))
+            {
+                cmd.Parameters.Add(Factory.CreateParameter("@uid", userId));
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
+            }
+        }
+
+        public bool DeleteByUserId(int userId)
+        {
+            using (var conn = Open())
+            using (var cmd = Factory.CreateCommand("DELETE FROM Reservations WHERE UserID=@uid", conn))
+            {
+                cmd.Parameters.Add(Factory.CreateParameter("@uid", userId));
+                return cmd.ExecuteNonQuery() >= 0;
+            }
+        }
+
+        public bool LocationResourcesHaveReservations(int locationId)
+        {
+            using (var conn = Open())
+            using (var cmd = Factory.CreateCommand(
+                @"SELECT COUNT(*)
+          FROM Reservations
+          WHERE ResourceID IN (
+              SELECT ResourceID FROM Resources WHERE LocationID=@lid
+          )", conn))
+            {
+                cmd.Parameters.Add(Factory.CreateParameter("@lid", locationId));
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
+            }
+        }
+
+        public bool DeleteByLocationId(int locationId)
+        {
+            using (var conn = Open())
+            using (var cmd = Factory.CreateCommand(
+                @"DELETE FROM Reservations
+          WHERE ResourceID IN (
+              SELECT ResourceID FROM Resources WHERE LocationID=@lid
+          )", conn))
+            {
+                cmd.Parameters.Add(Factory.CreateParameter("@lid", locationId));
+                return cmd.ExecuteNonQuery() >= 0;
+            }
+        }
+
+        public bool ResourceHasReservations(int resourceId)
+        {
+            using (var conn = Open())
+            using (var cmd = Factory.CreateCommand("SELECT COUNT(*) FROM Reservations WHERE ResourceID=@rid", conn))
+            {
+                cmd.Parameters.Add(Factory.CreateParameter("@rid", resourceId));
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
+            }
+        }
+
+        public bool DeleteByResourceId(int resourceId)
+        {
+            using (var conn = Open())
+            using (var cmd = Factory.CreateCommand("DELETE FROM Reservations WHERE ResourceID=@rid", conn))
+            {
+                cmd.Parameters.Add(Factory.CreateParameter("@rid", resourceId));
+                return cmd.ExecuteNonQuery() >= 0;
+            }
+        }
+
+        public double GetReservedHoursForUserInMonth(int userId, DateTime monthDate)
+        {
+            using (var conn = Open())
+            {
+                DateTime monthStart = new DateTime(monthDate.Year, monthDate.Month, 1);
+                DateTime nextMonthStart = monthStart.AddMonths(1);
+
+                string sql =
+        @"SELECT StartDateTime, EndDateTime
+  FROM Reservations
+  WHERE UserID=@uid
+    AND ReservationStatus <> 'Canceled'
+    AND StartDateTime >= @monthStart
+    AND StartDateTime < @nextMonthStart";
+
+                using (var cmd = Factory.CreateCommand(sql, conn))
+                {
+                    cmd.Parameters.Add(Factory.CreateParameter("@uid", userId));
+                    cmd.Parameters.Add(Factory.CreateParameter("@monthStart", monthStart));
+                    cmd.Parameters.Add(Factory.CreateParameter("@nextMonthStart", nextMonthStart));
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        double totalHours = 0;
+
+                        while (reader.Read())
+                        {
+                            DateTime start = Convert.ToDateTime(reader["StartDateTime"]);
+                            DateTime end = Convert.ToDateTime(reader["EndDateTime"]);
+                            totalHours += (end - start).TotalHours;
+                        }
+
+                        return totalHours;
+                    }
+                }
+            }
+        }
     }
 }

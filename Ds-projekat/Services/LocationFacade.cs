@@ -6,10 +6,14 @@ namespace Ds_projekat.Services
     internal class LocationFacade
     {
         private readonly ILocationRepository _locationRepository;
+        private readonly IResourceRepository _resourceRepository;
+        private readonly IReservationRepository _reservationRepository;
 
         public LocationFacade()
         {
             _locationRepository = new LocationRepository();
+            _resourceRepository = new ResourceRepository();
+            _reservationRepository = new ReservationRepository();
         }
 
         public ServiceResult AddLocation(Location location)
@@ -69,6 +73,46 @@ namespace Ds_projekat.Services
             }
         }
 
+        public ServiceResult DeleteLocationWithCheck(int locationId, bool deleteResourcesToo)
+        {
+            try
+            {
+                Location location = _locationRepository.GetById(locationId);
+                if (location == null)
+                    return ServiceResult.Fail("Lokacija ne postoji.");
+
+                bool hasResources = _resourceRepository.LocationHasResources(locationId);
+
+                if (hasResources && !deleteResourcesToo)
+                {
+                    return ServiceResult.Fail("Lokacija ima resurse i ne može biti obrisana dok se oni ne obrišu.");
+                }
+
+                if (hasResources && deleteResourcesToo)
+                {
+                    // prvo rezervacije za te resurse
+                    _reservationRepository.DeleteByLocationId(locationId);
+
+                    // onda resursi i detalji
+                    _resourceRepository.DeleteByLocationId(locationId);
+                }
+
+                bool deleted = _locationRepository.Delete(locationId);
+
+                if (!deleted)
+                    return ServiceResult.Fail("Lokacija nije obrisana.");
+
+                if (hasResources && deleteResourcesToo)
+                    return ServiceResult.Ok("Lokacija i svi njeni resursi su uspešno obrisani.");
+
+                return ServiceResult.Ok("Lokacija je uspešno obrisana.");
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult.Fail("Greška pri brisanju lokacije: " + ex.Message);
+            }
+        }
+
         public Location GetById(int id)
         {
             return _locationRepository.GetById(id);
@@ -77,6 +121,11 @@ namespace Ds_projekat.Services
         public List<Location> GetAll()
         {
             return _locationRepository.GetAll();
+        }
+
+        public bool LocationHasResources(int locationId)
+        {
+            return _resourceRepository.LocationHasResources(locationId);
         }
     }
 }

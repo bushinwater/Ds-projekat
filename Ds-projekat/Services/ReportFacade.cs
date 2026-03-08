@@ -93,5 +93,30 @@ namespace Ds_projekat.Services
                 return ServiceResult.Fail("Greska pri exportu membership types: " + ex.Message);
             }
         }
+
+        public ServiceResult ExportAllReportsToFolder(string folderPath)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(folderPath))
+                    return ServiceResult.Fail("Folder za export nije unet.");
+
+                if (!System.IO.Directory.Exists(folderPath))
+                    System.IO.Directory.CreateDirectory(folderPath);
+
+                string dateSuffix = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+
+                ExportUsersToCsv(System.IO.Path.Combine(folderPath, "users_" + dateSuffix + ".csv"));
+                ExportResourcesToCsv(System.IO.Path.Combine(folderPath, "resources_" + dateSuffix + ".csv"));
+                ExportLocationsToCsv(System.IO.Path.Combine(folderPath, "locations_" + dateSuffix + ".csv"));
+                ExportMembershipTypesToCsv(System.IO.Path.Combine(folderPath, "membership_types_" + dateSuffix + ".csv"));
+
+                return ServiceResult.Ok("Svi reporti su uspešno eksportovani.");
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult.Fail("Greška pri exportu svih reporta: " + ex.Message);
+            }
+        }
     }
 }

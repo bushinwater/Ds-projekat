@@ -14,5 +14,7 @@ namespace Ds_projekat
 
         List<Resource> GetAllResources();
         List<Resource> GetResourcesByLocation(int locationId);
+        bool LocationHasResources(int locationId);
+        bool DeleteByLocationId(int locationId);
     }
 }

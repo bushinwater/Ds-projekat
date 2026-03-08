@@ -37,6 +37,8 @@ namespace Ds_projekat.Services
                 validator.AddStrategy(new ResourceActiveValidationStrategy());
                 validator.AddStrategy(new OverlapValidationStrategy());
                 validator.AddStrategy(new RoomCapacityValidationStrategy());
+                validator.AddStrategy(new WorkingHoursValidationStrategy());
+                validator.AddStrategy(new MembershipHoursLimitValidationStrategy());
 
                 ReservationValidationResult validationResult = validator.Validate(request);
 
@@ -144,6 +146,10 @@ namespace Ds_projekat.Services
             {
                 return ServiceResult.Fail("Greska pri proveri rezervacije: " + ex.Message);
             }
+        }
+        public List<Reservation> GetAll()
+        {
+            return _reservationRepository.GetAll();
         }
     }
 }

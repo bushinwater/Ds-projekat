@@ -7,11 +7,13 @@ namespace Ds_projekat.Services
     {
         private readonly IResourceRepository _resourceRepository;
         private readonly ILocationRepository _locationRepository;
+        private readonly IReservationRepository _reservationRepository;
 
         public ResourceFacade()
         {
             _resourceRepository = new ResourceRepository();
             _locationRepository = new LocationRepository();
+            _reservationRepository = new ReservationRepository();
         }
 
         public ServiceResult AddDesk(Resource resource, DeskDetails desk)
@@ -140,6 +142,48 @@ namespace Ds_projekat.Services
         public List<Resource> GetResourcesByLocation(int locationId)
         {
             return _resourceRepository.GetResourcesByLocation(locationId);
+        }
+
+        public bool ResourceHasReservations(int resourceId)
+        {
+            return _reservationRepository.ResourceHasReservations(resourceId);
+        }
+
+        public ServiceResult DeleteResourceWithCheck(int resourceId, bool deleteReservationsToo)
+        {
+            try
+            {
+                Resource resource = _resourceRepository.GetResource(resourceId);
+
+                if (resource == null)
+                    return ServiceResult.Fail("Resurs ne postoji.");
+
+                bool hasReservations = _reservationRepository.ResourceHasReservations(resourceId);
+
+                if (hasReservations && !deleteReservationsToo)
+                {
+                    return ServiceResult.Fail("Resurs ima rezervacije i ne može biti obrisan dok se one ne obrišu.");
+                }
+
+                if (hasReservations && deleteReservationsToo)
+                {
+                    _reservationRepository.DeleteByResourceId(resourceId);
+                }
+
+                bool deleted = _resourceRepository.DeleteResource(resourceId);
+
+                if (!deleted)
+                    return ServiceResult.Fail("Resurs nije obrisan.");
+
+                if (hasReservations && deleteReservationsToo)
+                    return ServiceResult.Ok("Resurs i njegove rezervacije su uspešno obrisani.");
+
+                return ServiceResult.Ok("Resurs je uspešno obrisan.");
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult.Fail("Greška pri brisanju resursa: " + ex.Message);
+            }
         }
     }
 }

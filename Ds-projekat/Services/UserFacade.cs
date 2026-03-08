@@ -8,11 +8,13 @@ namespace Ds_projekat.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMembershipTypeRepository _membershipRepository;
+        private readonly IReservationRepository _reservationRepository;
 
         public UserFacade()
         {
             _userRepository = new UserRepository();
             _membershipRepository = new MembershipTypeRepository();
+            _reservationRepository = new ReservationRepository();
         }
 
         public ServiceResult AddUser(User user)
@@ -84,6 +86,42 @@ namespace Ds_projekat.Services
             catch (Exception ex)
             {
                 return ServiceResult.Fail("Greska pri brisanju korisnika: " + ex.Message);
+            }
+        }
+
+        public ServiceResult DeleteUserWithCheck(int userId, bool deleteReservationsToo)
+        {
+            try
+            {
+                User user = _userRepository.GetById(userId);
+                if (user == null)
+                    return ServiceResult.Fail("Korisnik ne postoji.");
+
+                bool hasReservations = _reservationRepository.UserHasReservations(userId);
+
+                if (hasReservations && !deleteReservationsToo)
+                {
+                    return ServiceResult.Fail("Korisnik ima rezervacije i ne može biti obrisan dok se one ne obrišu.");
+                }
+
+                if (hasReservations && deleteReservationsToo)
+                {
+                    _reservationRepository.DeleteByUserId(userId);
+                }
+
+                bool deleted = _userRepository.Delete(userId);
+
+                if (!deleted)
+                    return ServiceResult.Fail("Korisnik nije obrisan.");
+
+                if (hasReservations && deleteReservationsToo)
+                    return ServiceResult.Ok("Korisnik i njegove rezervacije su uspešno obrisani.");
+
+                return ServiceResult.Ok("Korisnik je uspešno obrisan.");
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult.Fail("Greška pri brisanju korisnika: " + ex.Message);
             }
         }
 

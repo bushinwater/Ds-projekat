@@ -1,1 +1,2 @@
-﻿
+﻿Coworking Hub
+Server=(localdb)\server1;Database=Coworking;Integrated Security=True;Encrypt=False;TrustServerCertificate=True;

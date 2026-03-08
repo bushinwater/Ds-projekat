@@ -94,6 +94,33 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AdminsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DashboardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LocationsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MembershipsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReportsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReservationsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ResourcesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SectionFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UsersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="DBFactory\IdbProviderFactory.cs" />
     <Compile Include="obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
     <Compile Include="Program.cs" />
@@ -130,30 +157,6 @@
     <Compile Include="Strategies\ReservationValidation\RoomCapacityValidationStrategy.cs" />
     <Compile Include="Strategies\ReservationValidation\UserActiveValidationStrategy.cs" />
     <Compile Include="test.cs" />
-    <Compile Include="UI\Forms\MainShellForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\MainShellForm.Designer.cs">
-      <DependentUpon>MainShellForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Pages\ReservationsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Pages\ReservationsPage.Designer.cs">
-      <DependentUpon>ReservationsPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Pages\ResourcesPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Pages\ResourcesPage.Designer.cs">
-      <DependentUpon>ResourcesPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Pages\UsersPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Pages\UsersPage.Designer.cs">
-      <DependentUpon>UsersPage.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -166,18 +169,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\Forms\MainShellForm.resx">
-      <DependentUpon>MainShellForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Pages\ReservationsPage.resx">
-      <DependentUpon>ReservationsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Pages\ResourcesPage.resx">
-      <DependentUpon>ResourcesPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Pages\UsersPage.resx">
-      <DependentUpon>UsersPage.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
     <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="obj\Debug\Ds-projekat.csproj.AssemblyReference.cache" />
@@ -196,14 +187,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config.txt" />
-    <Content Include="UI\Assets\clanstvo.png" />
-    <Content Include="UI\Assets\house.png" />
-    <Content Include="UI\Assets\izvestaj.png" />
-    <Content Include="UI\Assets\lokacija.png" />
-    <Content Include="UI\Assets\resursi.png" />
-    <Content Include="UI\Assets\rezervacije.png" />
-    <Content Include="UI\Assets\user.png" />
+    <Content Include="config.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Debug\" />

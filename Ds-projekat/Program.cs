@@ -1,4 +1,3 @@
-﻿using Ds_projekat.UI.Forms;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -18,8 +17,15 @@ namespace Ds_projekat
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            var isConnected = DataBase.Instance.TestConnection(out var message);
+            MessageBox.Show(
+                message,
+                isConnected ? "Database connection" : "Database connection error",
+                MessageBoxButtons.OK,
+                isConnected ? MessageBoxIcon.Information : MessageBoxIcon.Error);
+
             Application.Run(new Form1());
-            
         }
     }
 }

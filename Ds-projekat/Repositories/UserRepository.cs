@@ -59,7 +59,7 @@ namespace Ds_projekat
             return cmd.ExecuteNonQuery() > 0;
         }
 
-        public User? GetById(int id)
+        public User GetById(int id)
         {
             using var conn = Open();
             using var cmd = Factory.CreateCommand("SELECT * FROM Users WHERE UserID=@id", conn);
@@ -69,7 +69,7 @@ namespace Ds_projekat
             return r.Read() ? Map(r) : null;
         }
 
-        public User? GetByEmail(string email)
+        public User GetByEmail(string email)
         {
             using var conn = Open();
             using var cmd = Factory.CreateCommand("SELECT * FROM Users WHERE Email=@em", conn);

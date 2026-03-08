@@ -1,4 +1,4 @@
-﻿using Ds_projekat.Repositories.Interfaces;
+using Ds_projekat.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -50,6 +50,24 @@ namespace Ds_projekat.Services
             {
                 if (mt.MembershipTypeID <= 0)
                     return ServiceResult.Fail("Neispravan ID tipa clanarine.");
+
+                if (string.IsNullOrWhiteSpace(mt.PackageName))
+                    return ServiceResult.Fail("Naziv paketa je obavezan.");
+
+                if (mt.Price < 0)
+                    return ServiceResult.Fail("Cena ne moze biti negativna.");
+
+                if (mt.DurationDays <= 0)
+                    return ServiceResult.Fail("Trajanje mora biti vece od 0.");
+
+                if (mt.MaxReservationHoursPerMonth < 0)
+                    return ServiceResult.Fail("Maksimalan broj sati ne moze biti negativan.");
+
+                if (!mt.MeetingRoomAccess && mt.MeetingRoomHoursPerMonth.HasValue)
+                    return ServiceResult.Fail("Ako paket nema pristup salama, broj sati sale mora biti prazan.");
+
+                if (mt.MeetingRoomAccess && (!mt.MeetingRoomHoursPerMonth.HasValue || mt.MeetingRoomHoursPerMonth.Value <= 0))
+                    return ServiceResult.Fail("Ako paket ima pristup salama, broj sati sale mora biti veci od 0.");
 
                 bool ok = _membershipRepository.Update(mt);
                 if (!ok)

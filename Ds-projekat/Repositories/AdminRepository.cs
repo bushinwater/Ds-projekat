@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 
 namespace Ds_projekat
 {
@@ -40,31 +41,41 @@ namespace Ds_projekat
             return cmd.ExecuteNonQuery() > 0;
         }
 
-        public Admin? GetByUserId(int userId)
+        public Admin GetByUserId(int userId)
         {
             using var conn = Open();
             using var cmd = Factory.CreateCommand("SELECT * FROM Admins WHERE UserID=@uid", conn);
             cmd.Parameters.Add(Factory.CreateParameter("@uid", userId));
             using var r = cmd.ExecuteReader();
-            if (!r.Read()) return null;
-
-            return new Admin
-            {
-                UserID = Convert.ToInt32(r["UserID"]),
-                RoleName = r["RoleName"].ToString() ?? "",
-                Username = r["Username"].ToString() ?? "",
-                HashedPass = r["HashedPass"].ToString() ?? ""
-            };
+            return r.Read() ? Map(r) : null;
         }
 
-        public Admin? GetByUsername(string username)
+        public Admin GetByUsername(string username)
         {
             using var conn = Open();
             using var cmd = Factory.CreateCommand("SELECT * FROM Admins WHERE Username=@u", conn);
             cmd.Parameters.Add(Factory.CreateParameter("@u", username));
             using var r = cmd.ExecuteReader();
-            if (!r.Read()) return null;
+            return r.Read() ? Map(r) : null;
+        }
 
+        public List<Admin> GetAll()
+        {
+            List<Admin> admins = new List<Admin>();
+            using var conn = Open();
+            using var cmd = Factory.CreateCommand("SELECT * FROM Admins ORDER BY Username", conn);
+            using var r = cmd.ExecuteReader();
+
+            while (r.Read())
+            {
+                admins.Add(Map(r));
+            }
+
+            return admins;
+        }
+
+        private static Admin Map(dynamic r)
+        {
             return new Admin
             {
                 UserID = Convert.ToInt32(r["UserID"]),

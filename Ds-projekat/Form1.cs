@@ -34,53 +34,71 @@ namespace Ds_projekat
         private Button btnReports;
         private Button btnExit;
 
-        private readonly Color _normalColor = Color.FromArgb(44, 58, 89);
-        private readonly Color _activeColor = Color.FromArgb(52, 120, 246);
+        private readonly Color _shellBackgroundColor = AppTheme.AppBackgroundColor;
+        private readonly Color _surfaceColor = AppTheme.SurfaceStrongColor;
+        private readonly Color _normalColor = AppTheme.PrimaryMutedColor;
+        private readonly Color _activeColor = AppTheme.AccentColor;
+        private readonly Color _sidebarColor = AppTheme.PrimaryColor;
+        private readonly Color _textColor = AppTheme.TextColor;
+        private readonly Color _mutedTextColor = AppTheme.MutedTextColor;
+        private readonly string _brandName;
 
         public Form1()
         {
+            try
+            {
+                AppConfig.Instance.Load("config.txt");
+                _brandName = string.IsNullOrWhiteSpace(AppConfig.Instance.BrandName)
+                    ? "Coworking"
+                    : AppConfig.Instance.BrandName;
+            }
+            catch
+            {
+                _brandName = "Coworking";
+            }
+
             InitializeShell();
-            ShowSection(_dashboardForm, btnDashboard, "Dashboard", "Pregled sistema");
+            ShowSection(_dashboardForm, btnDashboard, "Kontrolna tabla", "Pregled sistema");
         }
 
         private void InitializeShell()
         {
             SuspendLayout();
 
-            Text = "Coworking Space Management";
+            Text = _brandName + " - Administratorski panel";
             StartPosition = FormStartPosition.CenterScreen;
             WindowState = FormWindowState.Maximized;
             MinimumSize = new Size(1200, 750);
-            BackColor = Color.FromArgb(245, 247, 250);
+            BackColor = _shellBackgroundColor;
             Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
 
             sidebarPanel = new Panel
             {
                 Dock = DockStyle.Left,
                 Width = 240,
-                BackColor = Color.FromArgb(32, 42, 68)
+                BackColor = _sidebarColor
             };
 
             headerPanel = new Panel
             {
                 Dock = DockStyle.Top,
                 Height = 80,
-                BackColor = Color.White,
+                BackColor = _surfaceColor,
                 Padding = new Padding(20, 10, 20, 10)
             };
 
             contentPanel = new Panel
             {
                 Dock = DockStyle.Fill,
-                BackColor = Color.FromArgb(245, 247, 250),
+                BackColor = _shellBackgroundColor,
                 Padding = new Padding(15)
             };
 
             lblTitle = new Label
             {
                 AutoSize = true,
-                Font = new Font("Segoe UI", 18F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(35, 35, 35),
+                Font = new Font("Georgia", 18F, FontStyle.Bold),
+                ForeColor = _textColor,
                 Location = new Point(20, 12)
             };
 
@@ -88,42 +106,50 @@ namespace Ds_projekat
             {
                 AutoSize = true,
                 Font = new Font("Segoe UI", 10F, FontStyle.Regular),
-                ForeColor = Color.Gray,
+                ForeColor = _mutedTextColor,
                 Location = new Point(22, 48)
             };
 
             headerPanel.Controls.Add(lblTitle);
             headerPanel.Controls.Add(lblSubtitle);
 
+            Panel accentBar = new Panel
+            {
+                Dock = DockStyle.Bottom,
+                Height = 3,
+                BackColor = _activeColor
+            };
+            headerPanel.Controls.Add(accentBar);
+
             Label logo = new Label
             {
-                Text = "DS PROJEKAT",
+                Text = _brandName.ToUpperInvariant(),
                 ForeColor = Color.White,
-                Font = new Font("Segoe UI", 16F, FontStyle.Bold),
+                Font = new Font("Georgia", 16F, FontStyle.Bold),
                 AutoSize = false,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.Top,
                 Height = 80
             };
 
-            btnDashboard = CreateSidebarButton("Dashboard");
-            btnUsers = CreateSidebarButton("Users");
-            btnMemberships = CreateSidebarButton("Membership Types");
-            btnLocations = CreateSidebarButton("Locations");
-            btnResources = CreateSidebarButton("Resources");
-            btnReservations = CreateSidebarButton("Reservations");
-            btnAdmins = CreateSidebarButton("Admins");
-            btnReports = CreateSidebarButton("Reports");
-            btnExit = CreateSidebarButton("Exit");
+            btnDashboard = CreateSidebarButton("Kontrolna tabla");
+            btnUsers = CreateSidebarButton("Korisnici");
+            btnMemberships = CreateSidebarButton("Clanarine");
+            btnLocations = CreateSidebarButton("Lokacije");
+            btnResources = CreateSidebarButton("Resursi");
+            btnReservations = CreateSidebarButton("Rezervacije");
+            btnAdmins = CreateSidebarButton("Administratori");
+            btnReports = CreateSidebarButton("Izvestaji");
+            btnExit = CreateSidebarButton("Izlaz");
 
-            btnDashboard.Click += (s, e) => ShowSection(_dashboardForm, btnDashboard, "Dashboard", "Pregled sistema");
-            btnUsers.Click += (s, e) => ShowSection(_usersForm, btnUsers, "Users", "Upravljanje korisnicima");
-            btnMemberships.Click += (s, e) => ShowSection(_membershipsForm, btnMemberships, "Membership Types", "Upravljanje paketima clanarina");
-            btnLocations.Click += (s, e) => ShowSection(_locationsForm, btnLocations, "Locations", "Upravljanje lokacijama");
-            btnResources.Click += (s, e) => ShowSection(_resourcesForm, btnResources, "Resources", "Upravljanje resursima");
-            btnReservations.Click += (s, e) => ShowSection(_reservationsForm, btnReservations, "Reservations", "Upravljanje rezervacijama");
-            btnAdmins.Click += (s, e) => ShowSection(_adminsForm, btnAdmins, "Admins", "Administracija naloga");
-            btnReports.Click += (s, e) => ShowSection(_reportsForm, btnReports, "Reports", "Izvestaji i CSV export");
+            btnDashboard.Click += (s, e) => ShowSection(_dashboardForm, btnDashboard, "Kontrolna tabla", "Pregled sistema");
+            btnUsers.Click += (s, e) => ShowSection(_usersForm, btnUsers, "Korisnici", "Upravljanje korisnicima");
+            btnMemberships.Click += (s, e) => ShowSection(_membershipsForm, btnMemberships, "Clanarine", "Upravljanje paketima clanarina");
+            btnLocations.Click += (s, e) => ShowSection(_locationsForm, btnLocations, "Lokacije", "Upravljanje lokacijama");
+            btnResources.Click += (s, e) => ShowSection(_resourcesForm, btnResources, "Resursi", "Upravljanje resursima");
+            btnReservations.Click += (s, e) => ShowSection(_reservationsForm, btnReservations, "Rezervacije", "Upravljanje rezervacijama");
+            btnAdmins.Click += (s, e) => ShowSection(_adminsForm, btnAdmins, "Administratori", "Administracija naloga");
+            btnReports.Click += (s, e) => ShowSection(_reportsForm, btnReports, "Izvestaji", "Izvestaji i CSV export");
             btnExit.Click += (s, e) => Close();
 
             _menuButtons.AddRange(new[]
@@ -138,7 +164,8 @@ namespace Ds_projekat
                 FlowDirection = FlowDirection.TopDown,
                 WrapContents = false,
                 AutoScroll = true,
-                Padding = new Padding(10, 10, 10, 10)
+                Padding = new Padding(10, 10, 10, 10),
+                BackColor = _sidebarColor
             };
 
             menuPanel.Controls.Add(btnDashboard);
@@ -173,7 +200,9 @@ namespace Ds_projekat
                 BackColor = _normalColor,
                 ForeColor = Color.White,
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                Cursor = Cursors.Hand
+                Cursor = Cursors.Hand,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(16, 0, 0, 0)
             };
 
             button.FlatAppearance.BorderSize = 0;
@@ -196,12 +225,19 @@ namespace Ds_projekat
             sectionForm.Visible = true;
             sectionForm.BringToFront();
 
+            if (sectionForm is IReloadableSection reloadableSection)
+            {
+                reloadableSection.LoadData();
+            }
+
             foreach (Button button in _menuButtons)
             {
                 button.BackColor = _normalColor;
+                button.ForeColor = Color.White;
             }
 
             activeButton.BackColor = _activeColor;
+            activeButton.ForeColor = _sidebarColor;
             lblTitle.Text = title;
             lblSubtitle.Text = subtitle;
         }

@@ -7,8 +7,8 @@ namespace Ds_projekat
         int Add(User u);
         bool Update(User u);
         bool Delete(int id);
-        User? GetById(int id);
-        User? GetByEmail(string email);
+        User GetById(int id);
+        User GetByEmail(string email);
         List<User> GetAll();
     }
 }

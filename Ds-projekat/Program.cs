@@ -21,11 +21,11 @@ namespace Ds_projekat
             var isConnected = DataBase.Instance.TestConnection(out var message);
             MessageBox.Show(
                 message,
-                isConnected ? "Database connection" : "Database connection error",
+                isConnected ? "Povezivanje sa bazom" : "Greska pri povezivanju sa bazom",
                 MessageBoxButtons.OK,
                 isConnected ? MessageBoxIcon.Information : MessageBoxIcon.Error);
 
-            Application.Run(new Form1());
+            Application.Run(new LoginForm());
         }
     }
 }

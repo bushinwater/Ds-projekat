@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-
 namespace Ds_projekat.Services
 {
     internal class LocationFacade
@@ -25,6 +24,9 @@ namespace Ds_projekat.Services
                 if (string.IsNullOrWhiteSpace(location.City))
                     return ServiceResult.Fail("Grad je obavezan.");
 
+                if (string.IsNullOrWhiteSpace(location.WorkingHours))
+                    return ServiceResult.Fail("Radno vreme je obavezno.");
+
                 if (location.MaxUsers <= 0)
                     return ServiceResult.Fail("Maksimalan broj korisnika mora biti veci od 0.");
 
@@ -41,6 +43,24 @@ namespace Ds_projekat.Services
         {
             try
             {
+                if (location.LocationID <= 0)
+                    return ServiceResult.Fail("Neispravan ID lokacije.");
+
+                if (string.IsNullOrWhiteSpace(location.LocationName))
+                    return ServiceResult.Fail("Naziv lokacije je obavezan.");
+
+                if (string.IsNullOrWhiteSpace(location.AddressName))
+                    return ServiceResult.Fail("Adresa je obavezna.");
+
+                if (string.IsNullOrWhiteSpace(location.City))
+                    return ServiceResult.Fail("Grad je obavezan.");
+
+                if (string.IsNullOrWhiteSpace(location.WorkingHours))
+                    return ServiceResult.Fail("Radno vreme je obavezno.");
+
+                if (location.MaxUsers <= 0)
+                    return ServiceResult.Fail("Maksimalan broj korisnika mora biti veci od 0.");
+
                 bool ok = _locationRepository.Update(location);
                 if (!ok)
                     return ServiceResult.Fail("Lokacija nije azurirana.");

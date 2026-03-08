@@ -43,7 +43,7 @@ namespace Ds_projekat
             cmd.Parameters.Add(Factory.CreateParameter("@dur", mt.DurationDays));
             cmd.Parameters.Add(Factory.CreateParameter("@maxh", mt.MaxReservationHoursPerMonth));
             cmd.Parameters.Add(Factory.CreateParameter("@mra", mt.MeetingRoomAccess));
-            cmd.Parameters.Add(Factory.CreateParameter("@mrh", (object?)mt.MeetingRoomHoursPerMonth ?? DBNull.Value));
+            cmd.Parameters.Add(Factory.CreateParameter("@mrh", (object)mt.MeetingRoomHoursPerMonth ?? DBNull.Value));
             cmd.Parameters.Add(Factory.CreateParameter("@id", mt.MembershipTypeID));
 
             return cmd.ExecuteNonQuery() > 0;

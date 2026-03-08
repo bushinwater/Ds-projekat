@@ -6,12 +6,24 @@ namespace Ds_projekat
 {
     internal abstract class SectionFormBase : Form
     {
+        protected static readonly Color AppBackgroundColor = AppTheme.AppBackgroundColor;
+        protected static readonly Color SurfaceColor = AppTheme.SurfaceColor;
+        protected static readonly Color SurfaceStrongColor = AppTheme.SurfaceStrongColor;
+        protected static readonly Color PrimaryColor = AppTheme.PrimaryColor;
+        protected static readonly Color PrimaryMutedColor = AppTheme.PrimaryMutedColor;
+        protected static readonly Color AccentColor = AppTheme.AccentColor;
+        protected static readonly Color AccentSoftColor = AppTheme.AccentSoftColor;
+        protected static readonly Color BorderColor = AppTheme.BorderColor;
+        protected static readonly Color TextColor = AppTheme.TextColor;
+        protected static readonly Color MutedTextColor = AppTheme.MutedTextColor;
+
         protected SectionFormBase()
         {
             TopLevel = false;
             FormBorderStyle = FormBorderStyle.None;
             Dock = DockStyle.Fill;
-            BackColor = Color.FromArgb(245, 247, 250);
+            BackColor = AppBackgroundColor;
+            ForeColor = TextColor;
             Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             ShowInTaskbar = false;
         }
@@ -26,7 +38,8 @@ namespace Ds_projekat
                 Width = width,
                 Height = height,
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                BackColor = Color.White
+                BackColor = SurfaceStrongColor,
+                ForeColor = PrimaryColor
             };
         }
 
@@ -38,7 +51,9 @@ namespace Ds_projekat
                 Left = x,
                 Top = y,
                 AutoSize = true,
-                Font = new Font("Segoe UI", 10F, FontStyle.Regular)
+                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+                ForeColor = TextColor,
+                BackColor = Color.Transparent
             };
         }
 
@@ -49,7 +64,10 @@ namespace Ds_projekat
                 Name = name,
                 Left = x,
                 Top = y,
-                Width = width
+                Width = width,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = SurfaceColor,
+                ForeColor = TextColor
             };
         }
 
@@ -61,7 +79,10 @@ namespace Ds_projekat
                 Left = x,
                 Top = y,
                 Width = width,
-                DropDownStyle = ComboBoxStyle.DropDownList
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                FlatStyle = FlatStyle.Flat,
+                BackColor = SurfaceColor,
+                ForeColor = TextColor
             };
         }
 
@@ -73,10 +94,11 @@ namespace Ds_projekat
                 Left = x,
                 Top = y,
                 Width = width,
-                Height = 36,
-                BackColor = Color.FromArgb(52, 120, 246),
-                ForeColor = Color.White,
+                Height = 38,
+                BackColor = PrimaryColor,
+                ForeColor = SurfaceColor,
                 FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold, GraphicsUnit.Point),
                 Cursor = Cursors.Hand
             };
 
@@ -93,14 +115,33 @@ namespace Ds_projekat
                 Top = y,
                 Width = width,
                 Height = height,
-                BackgroundColor = Color.White,
-                BorderStyle = BorderStyle.None,
+                BackgroundColor = SurfaceStrongColor,
+                BorderStyle = BorderStyle.FixedSingle,
                 AllowUserToAddRows = false,
                 AllowUserToDeleteRows = false,
                 ReadOnly = true,
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
                 MultiSelect = false,
-                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                GridColor = BorderColor,
+                EnableHeadersVisualStyles = false,
+                ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single,
+                RowHeadersVisible = false,
+                ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
+                {
+                    BackColor = PrimaryColor,
+                    ForeColor = SurfaceColor,
+                    SelectionBackColor = PrimaryMutedColor,
+                    SelectionForeColor = SurfaceColor,
+                    Font = new Font("Segoe UI", 9.5F, FontStyle.Bold, GraphicsUnit.Point)
+                },
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    BackColor = SurfaceStrongColor,
+                    ForeColor = TextColor,
+                    SelectionBackColor = AccentSoftColor,
+                    SelectionForeColor = PrimaryColor
+                }
             };
         }
 
@@ -112,8 +153,15 @@ namespace Ds_projekat
                 Top = y,
                 Width = 240,
                 Height = 120,
-                BackColor = Color.White,
+                BackColor = SurfaceStrongColor,
                 BorderStyle = BorderStyle.FixedSingle
+            };
+
+            Panel accentStrip = new Panel
+            {
+                Dock = DockStyle.Top,
+                Height = 6,
+                BackColor = AccentColor
             };
 
             Label titleLabel = new Label
@@ -122,19 +170,21 @@ namespace Ds_projekat
                 Left = 20,
                 Top = 20,
                 AutoSize = true,
-                Font = new Font("Segoe UI", 11F, FontStyle.Bold)
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                ForeColor = MutedTextColor
             };
 
             Label valueLabel = new Label
             {
                 Text = value,
                 Left = 20,
-                Top = 55,
+                Top = 48,
                 AutoSize = true,
                 Font = new Font("Segoe UI", 24F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(52, 120, 246)
+                ForeColor = PrimaryColor
             };
 
+            card.Controls.Add(accentStrip);
             card.Controls.Add(titleLabel);
             card.Controls.Add(valueLabel);
 
@@ -148,7 +198,10 @@ namespace Ds_projekat
                 Name = name,
                 Left = x,
                 Top = y,
-                Width = width
+                Width = width,
+                Format = DateTimePickerFormat.Short,
+                CalendarMonthBackground = SurfaceStrongColor,
+                CalendarForeColor = TextColor
             };
         }
 
@@ -161,8 +214,50 @@ namespace Ds_projekat
                 Top = y,
                 Width = width,
                 Format = DateTimePickerFormat.Custom,
-                CustomFormat = "dd.MM.yyyy HH:mm"
+                CustomFormat = "dd.MM.yyyy HH:mm",
+                CalendarMonthBackground = SurfaceStrongColor,
+                CalendarForeColor = TextColor
             };
+        }
+
+        protected NumericUpDown CreateNumericUpDown(string name, int x, int y, int width, int minimum, int maximum)
+        {
+            return new NumericUpDown
+            {
+                Name = name,
+                Left = x,
+                Top = y,
+                Width = width,
+                Minimum = minimum,
+                Maximum = maximum,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = SurfaceColor,
+                ForeColor = TextColor,
+                ThousandsSeparator = false
+            };
+        }
+
+        protected CheckBox CreateCheckBox(string name, string text, int x, int y)
+        {
+            return new CheckBox
+            {
+                Name = name,
+                Text = text,
+                Left = x,
+                Top = y,
+                AutoSize = true,
+                BackColor = Color.Transparent,
+                ForeColor = TextColor,
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Regular, GraphicsUnit.Point)
+            };
+        }
+
+        protected void SetGridHeader(DataGridView grid, string columnName, string headerText)
+        {
+            if (grid == null || !grid.Columns.Contains(columnName))
+                return;
+
+            grid.Columns[columnName].HeaderText = headerText;
         }
     }
 }

@@ -309,7 +309,9 @@ namespace Ds_projekat
                 else if (resource.ResourceType == "Room")
                 {
                     RoomDetails room = ReadRoomDetailsFromForm(resourceId);
-                    _resourceFacade.UpdateRoom(resource, room);
+                    ServiceResult result = _resourceFacade.UpdateRoom(resource, room);
+                    if (!result.Success)
+                        throw new Exception(result.Message);
                 }
                 else
                 {

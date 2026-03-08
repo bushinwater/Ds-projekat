@@ -145,5 +145,9 @@ namespace Ds_projekat.Services
                 return ServiceResult.Fail("Greska pri proveri rezervacije: " + ex.Message);
             }
         }
+        public List<Reservation> GetAll()
+        {
+            return _reservationRepository.GetAll();
+        }
     }
 }

@@ -115,5 +115,38 @@ namespace Ds_projekat
                 ReservationStatus = r["ReservationStatus"].ToString() ?? "Active"
             };
         }
+        public List<Reservation> GetAll()
+        {
+            List<Reservation> list = new List<Reservation>();
+
+            using var con = Open();
+            using var cmd = con.CreateCommand();
+
+            cmd.CommandText = @"
+        SELECT ReservationID, UserID, ResourceID, UsersCount,
+               StartDateTime, EndDateTime, ReservationStatus
+        FROM Reservations
+        ORDER BY ReservationID DESC";
+
+            using var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Reservation r = new Reservation
+                {
+                    ReservationID = Convert.ToInt32(reader["ReservationID"]),
+                    UserID = Convert.ToInt32(reader["UserID"]),
+                    ResourceID = Convert.ToInt32(reader["ResourceID"]),
+                    UsersCount = reader["UsersCount"] == DBNull.Value ? null : Convert.ToInt32(reader["UsersCount"]),
+                    StartDateTime = Convert.ToDateTime(reader["StartDateTime"]),
+                    EndDateTime = Convert.ToDateTime(reader["EndDateTime"]),
+                    ReservationStatus = reader["ReservationStatus"].ToString()
+                };
+
+                list.Add(r);
+            }
+
+            return list;
+        }
     }
 }

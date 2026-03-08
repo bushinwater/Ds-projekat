@@ -14,5 +14,6 @@ namespace Ds_projekat
         List<Reservation> GetByResource(int resourceId);
 
         bool HasOverlap(int resourceId, DateTime start, DateTime end, int? ignoreReservationId = null);
+        List<Reservation> GetAll();
     }
 }

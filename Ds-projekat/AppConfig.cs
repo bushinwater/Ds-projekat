@@ -33,10 +33,14 @@ namespace Ds_projekat
         public void Load(string path = "config.txt")
         {
             if (_loaded) return;
-            if (!File.Exists(path))
-                throw new FileNotFoundException($"Path doesn't exists: {path}! Put it in the same folder as .exe file (bin/Debug)");
+            var resolvedPath = Path.IsPathRooted(path)
+                ? path
+                : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
 
-            var lines = File.ReadAllLines(path);
+            if (!File.Exists(resolvedPath))
+                throw new FileNotFoundException($"Config file not found: {resolvedPath}");
+
+            var lines = File.ReadAllLines(resolvedPath);
 
             if (lines.Length < 2)
                 throw new InvalidOperationException("config.txt file has less then 2 lines");
@@ -51,3 +55,4 @@ namespace Ds_projekat
         }
     }
 }
+

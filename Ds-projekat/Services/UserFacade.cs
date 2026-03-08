@@ -1,4 +1,4 @@
-﻿using Ds_projekat.Repositories.Interfaces;
+using Ds_projekat.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -58,6 +58,22 @@ namespace Ds_projekat.Services
             {
                 if (user.UserID <= 0)
                     return ServiceResult.Fail("Neispravan ID korisnika.");
+
+                if (string.IsNullOrWhiteSpace(user.FirstName))
+                    return ServiceResult.Fail("Ime je obavezno.");
+
+                if (string.IsNullOrWhiteSpace(user.LastName))
+                    return ServiceResult.Fail("Prezime je obavezno.");
+
+                if (string.IsNullOrWhiteSpace(user.Email))
+                    return ServiceResult.Fail("Email je obavezan.");
+
+                MembershipType mt = _membershipRepository.GetById(user.MembershipTypeID);
+                if (mt == null)
+                    return ServiceResult.Fail("Izabrani tip clanarine ne postoji.");
+
+                if (user.MembershipEndDate < user.MembershipStartDate)
+                    return ServiceResult.Fail("Datum isteka mora biti posle datuma pocetka.");
 
                 bool ok = _userRepository.Update(user);
                 if (!ok)

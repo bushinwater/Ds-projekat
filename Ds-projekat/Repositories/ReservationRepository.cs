@@ -18,12 +18,33 @@ namespace Ds_projekat
             using var cmd = Factory.CreateCommand(sql, conn);
             cmd.Parameters.Add(Factory.CreateParameter("@uid", r.UserID));
             cmd.Parameters.Add(Factory.CreateParameter("@rid", r.ResourceID));
-            cmd.Parameters.Add(Factory.CreateParameter("@uc", (object?)r.UsersCount ?? DBNull.Value));
+            cmd.Parameters.Add(Factory.CreateParameter("@uc", (object)r.UsersCount ?? DBNull.Value));
             cmd.Parameters.Add(Factory.CreateParameter("@s", r.StartDateTime));
             cmd.Parameters.Add(Factory.CreateParameter("@e", r.EndDateTime));
             cmd.Parameters.Add(Factory.CreateParameter("@st", r.ReservationStatus));
 
             return Convert.ToInt32(cmd.ExecuteScalar());
+        }
+
+        public bool Update(Reservation r)
+        {
+            using var conn = Open();
+
+            string sql =
+@"UPDATE Reservations
+  SET UserID=@uid, ResourceID=@rid, UsersCount=@uc, StartDateTime=@s, EndDateTime=@e, ReservationStatus=@st
+  WHERE ReservationID=@id";
+
+            using var cmd = Factory.CreateCommand(sql, conn);
+            cmd.Parameters.Add(Factory.CreateParameter("@uid", r.UserID));
+            cmd.Parameters.Add(Factory.CreateParameter("@rid", r.ResourceID));
+            cmd.Parameters.Add(Factory.CreateParameter("@uc", (object)r.UsersCount ?? DBNull.Value));
+            cmd.Parameters.Add(Factory.CreateParameter("@s", r.StartDateTime));
+            cmd.Parameters.Add(Factory.CreateParameter("@e", r.EndDateTime));
+            cmd.Parameters.Add(Factory.CreateParameter("@st", r.ReservationStatus));
+            cmd.Parameters.Add(Factory.CreateParameter("@id", r.ReservationID));
+
+            return cmd.ExecuteNonQuery() > 0;
         }
 
         public bool UpdateStatus(int reservationId, string status)
@@ -45,13 +66,23 @@ namespace Ds_projekat
             return cmd.ExecuteNonQuery() > 0;
         }
 
-        public Reservation? GetById(int id)
+        public Reservation GetById(int id)
         {
             using var conn = Open();
             using var cmd = Factory.CreateCommand("SELECT * FROM Reservations WHERE ReservationID=@id", conn);
             cmd.Parameters.Add(Factory.CreateParameter("@id", id));
             using var r = cmd.ExecuteReader();
             return r.Read() ? Map(r) : null;
+        }
+
+        public List<Reservation> GetAll()
+        {
+            var list = new List<Reservation>();
+            using var conn = Open();
+            using var cmd = Factory.CreateCommand("SELECT * FROM Reservations ORDER BY StartDateTime DESC", conn);
+            using var r = cmd.ExecuteReader();
+            while (r.Read()) list.Add(Map(r));
+            return list;
         }
 
         public List<Reservation> GetByUser(int userId)

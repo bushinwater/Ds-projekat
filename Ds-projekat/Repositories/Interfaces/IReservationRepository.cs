@@ -6,10 +6,12 @@ namespace Ds_projekat
     internal interface IReservationRepository
     {
         int Add(Reservation r);
+        bool Update(Reservation r);
         bool UpdateStatus(int reservationId, string status); // Active/Finished/Canceled
         bool Delete(int reservationId);
 
-        Reservation? GetById(int id);
+        Reservation GetById(int id);
+        List<Reservation> GetAll();
         List<Reservation> GetByUser(int userId);
         List<Reservation> GetByResource(int resourceId);
 

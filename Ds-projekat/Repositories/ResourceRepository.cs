@@ -7,7 +7,7 @@ namespace Ds_projekat
 {
     internal class ResourceRepository : BaseRepository, IResourceRepository
     {
-        public int AddResource(Resource r, DeskDetails? desk, RoomDetails? room)
+        public int AddResource(Resource r, DeskDetails desk, RoomDetails room)
         {
             using var conn = Open();
             using var tx = conn.BeginTransaction();
@@ -27,7 +27,7 @@ namespace Ds_projekat
                     cmd.Parameters.Add(Factory.CreateParameter("@n", r.ResourceName));
                     cmd.Parameters.Add(Factory.CreateParameter("@t", r.ResourceType));
                     cmd.Parameters.Add(Factory.CreateParameter("@a", r.IsActive));
-                    cmd.Parameters.Add(Factory.CreateParameter("@d", (object?)r.Description ?? DBNull.Value));
+                    cmd.Parameters.Add(Factory.CreateParameter("@d", (object)r.Description ?? DBNull.Value));
                     resourceId = Convert.ToInt32(cmd.ExecuteScalar());
                 }
 
@@ -67,7 +67,7 @@ namespace Ds_projekat
             }
         }
 
-        public bool UpdateResource(Resource r, DeskDetails? desk, RoomDetails? room)
+        public bool UpdateResource(Resource r, DeskDetails desk, RoomDetails room)
         {
             using var conn = Open();
             using var tx = conn.BeginTransaction();
@@ -86,7 +86,7 @@ namespace Ds_projekat
                     cmd.Parameters.Add(Factory.CreateParameter("@n", r.ResourceName));
                     cmd.Parameters.Add(Factory.CreateParameter("@t", r.ResourceType));
                     cmd.Parameters.Add(Factory.CreateParameter("@a", r.IsActive));
-                    cmd.Parameters.Add(Factory.CreateParameter("@d", (object?)r.Description ?? DBNull.Value));
+                    cmd.Parameters.Add(Factory.CreateParameter("@d", (object)r.Description ?? DBNull.Value));
                     cmd.Parameters.Add(Factory.CreateParameter("@rid", r.ResourceID));
                     cmd.ExecuteNonQuery();
                 }
@@ -175,7 +175,7 @@ namespace Ds_projekat
             }
         }
 
-        public Resource? GetResource(int resourceId)
+        public Resource GetResource(int resourceId)
         {
             using var conn = Open();
             using var cmd = Factory.CreateCommand("SELECT * FROM Resources WHERE ResourceID=@rid", conn);
@@ -195,7 +195,7 @@ namespace Ds_projekat
             };
         }
 
-        public DeskDetails? GetDeskDetails(int resourceId)
+        public DeskDetails GetDeskDetails(int resourceId)
         {
             using var conn = Open();
             using var cmd = Factory.CreateCommand("SELECT * FROM DeskDetails WHERE ResourceID=@rid", conn);
@@ -210,7 +210,7 @@ namespace Ds_projekat
             };
         }
 
-        public RoomDetails? GetRoomDetails(int resourceId)
+        public RoomDetails GetRoomDetails(int resourceId)
         {
             using var conn = Open();
             using var cmd = Factory.CreateCommand("SELECT * FROM RoomDetails WHERE ResourceID=@rid", conn);

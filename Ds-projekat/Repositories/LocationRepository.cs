@@ -51,7 +51,7 @@ namespace Ds_projekat
             return cmd.ExecuteNonQuery() > 0;
         }
 
-        public Location? GetById(int id)
+        public Location GetById(int id)
         {
             using var conn = Open();
             using var cmd = Factory.CreateCommand("SELECT * FROM Locations WHERE LocationID=@id", conn);

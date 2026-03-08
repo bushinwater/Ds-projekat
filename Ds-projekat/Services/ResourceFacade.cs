@@ -18,6 +18,9 @@ namespace Ds_projekat.Services
         {
             try
             {
+                if (resource.LocationID <= 0)
+                    return ServiceResult.Fail("Izaberi lokaciju.");
+
                 if (_locationRepository.GetById(resource.LocationID) == null)
                     return ServiceResult.Fail("Lokacija ne postoji.");
 
@@ -42,6 +45,9 @@ namespace Ds_projekat.Services
         {
             try
             {
+                if (resource.LocationID <= 0)
+                    return ServiceResult.Fail("Izaberi lokaciju.");
+
                 if (_locationRepository.GetById(resource.LocationID) == null)
                     return ServiceResult.Fail("Lokacija ne postoji.");
 
@@ -65,10 +71,44 @@ namespace Ds_projekat.Services
             }
         }
 
+        public ServiceResult AddPrivateOffice(Resource resource)
+        {
+            try
+            {
+                if (resource.LocationID <= 0)
+                    return ServiceResult.Fail("Izaberi lokaciju.");
+
+                if (_locationRepository.GetById(resource.LocationID) == null)
+                    return ServiceResult.Fail("Lokacija ne postoji.");
+
+                if (string.IsNullOrWhiteSpace(resource.ResourceName))
+                    return ServiceResult.Fail("Naziv resursa je obavezan.");
+
+                // Privatna kancelarija nema dodatnu detail tabelu u ovoj verziji projekta.
+                resource.ResourceType = "Private Office";
+
+                int id = _resourceRepository.AddResource(resource, null, null);
+                return ServiceResult.Ok("Private office je uspesno dodat.", id);
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult.Fail("Greska pri dodavanju private office resursa: " + ex.Message);
+            }
+        }
+
         public ServiceResult UpdateDesk(Resource resource, DeskDetails desk)
         {
             try
             {
+                if (resource.ResourceID <= 0)
+                    return ServiceResult.Fail("Izaberi resurs za azuriranje.");
+
+                if (resource.LocationID <= 0)
+                    return ServiceResult.Fail("Izaberi lokaciju.");
+
+                if (desk == null || string.IsNullOrWhiteSpace(desk.DeskSubType))
+                    return ServiceResult.Fail("Tip stola je obavezan.");
+
                 resource.ResourceType = "Desk";
                 bool ok = _resourceRepository.UpdateResource(resource, desk, null);
 
@@ -87,6 +127,15 @@ namespace Ds_projekat.Services
         {
             try
             {
+                if (resource.ResourceID <= 0)
+                    return ServiceResult.Fail("Izaberi resurs za azuriranje.");
+
+                if (resource.LocationID <= 0)
+                    return ServiceResult.Fail("Izaberi lokaciju.");
+
+                if (room == null || room.Capacity <= 0)
+                    return ServiceResult.Fail("Kapacitet prostorije mora biti veci od 0.");
+
                 resource.ResourceType = "Room";
                 bool ok = _resourceRepository.UpdateResource(resource, null, room);
 
@@ -98,6 +147,33 @@ namespace Ds_projekat.Services
             catch (Exception ex)
             {
                 return ServiceResult.Fail("Greska pri azuriranju room resursa: " + ex.Message);
+            }
+        }
+
+        public ServiceResult UpdatePrivateOffice(Resource resource)
+        {
+            try
+            {
+                if (resource.ResourceID <= 0)
+                    return ServiceResult.Fail("Izaberi resurs za azuriranje.");
+
+                if (resource.LocationID <= 0)
+                    return ServiceResult.Fail("Izaberi lokaciju.");
+
+                if (string.IsNullOrWhiteSpace(resource.ResourceName))
+                    return ServiceResult.Fail("Naziv resursa je obavezan.");
+
+                resource.ResourceType = "Private Office";
+                bool ok = _resourceRepository.UpdateResource(resource, null, null);
+
+                if (!ok)
+                    return ServiceResult.Fail("Private office resurs nije azuriran.");
+
+                return ServiceResult.Ok("Private office resurs je uspesno azuriran.");
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult.Fail("Greska pri azuriranju private office resursa: " + ex.Message);
             }
         }
 
